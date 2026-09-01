@@ -16,7 +16,7 @@
 
 Each phase gets its own pre-implementation note covering architecture changes, DB changes, endpoints, frontend pages/components, permissions, data flow, and testing strategy **before code is written.**
 
-########### Suggested MVP-first slice
+## Suggested MVP-first slice
 
 ```
                     HR NEXUS MVP
