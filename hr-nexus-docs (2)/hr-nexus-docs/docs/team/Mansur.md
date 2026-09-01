@@ -44,6 +44,7 @@
 | TensorFlow | Intermediate |
 | Git | Intermediate |
 | GitHub | Intermediate |
+
 | Figma | Beginner |
 
 
