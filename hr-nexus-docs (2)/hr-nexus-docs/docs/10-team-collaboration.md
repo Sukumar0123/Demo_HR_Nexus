@@ -2,7 +2,7 @@
 
 This doc covers how the team actually works together day to day — branching strategy, code review, communication, and the habits that keep a multi-module project like HR Nexus consistent as more people touch it.
 
-## Branching Strategy
+## Branching Strategyggggggyyyyyyyy
 
 HR Nexus uses a **trunk-based branching model with short-lived feature branches**:
 
@@ -15,6 +15,7 @@ main                        ← always deployable, protected branch
 ```
 
 Rules:
+
 - `main` is protected — no direct pushes. Every change goes through a Pull Request.
 - Branch names are prefixed by intent: `feature/`, `fix/`, `chore/`, `refactor/`, `docs/`.
 - Branches are short-lived (days, not weeks). Long-lived branches drift from `main` and produce painful merge conflicts — if a feature is big, split it into smaller PRs behind a feature flag rather than one giant branch.
@@ -40,6 +41,7 @@ Reviewers check for, in this order:
 5. **Readability** — would someone unfamiliar with this PR understand it in six months?
 
 Review etiquette:
+
 - Comments are about the code, not the person. "This query will N+1 on large teams" not "why would you write it this way."
 - The PR author responds to every comment (even just "done" or "good catch, fixed") rather than silently pushing new commits.
 - Nitpicks are labeled as such ("nit: ...") so the author knows they're optional, not blocking.
