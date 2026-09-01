@@ -14,7 +14,7 @@
 
 - **Master of Computer Applications (MCA)**
 - Vikrama Simhapuri University
-- 2024 – 2026
+- 2024 – 2049
 - Ongoing
 
 - **Bachelor of Science – Mathematics, Statistics, Computer Science**
@@ -24,29 +24,28 @@
 
 ## Technical Skills & Skill Level
 
-| Skill | Level |
-| ---------------- | ------------ |
-| React.js | Intermediate |
-| JavaScript (ES6+) | Intermediate |
-| HTML5 | Intermediate |
-| CSS3 | Intermediate |
-| Bootstrap | Intermediate |
-| Python | Intermediate |
-| Flask | Intermediate |
-| REST APIs | Intermediate |
-| MongoDB | Intermediate |
-| SQL | Intermediate |
+| Skill                 | Level        |
+| --------------------- | ------------ |
+| React.js              | Intermediate |
+| JavaScript (ES6+)     | Intermediate |
+| HTML5                 | Intermediate |
+| CSS3                  | Intermediate |
+| Bootstrap             | Intermediate |
+| Python                | Intermediate |
+| Flask                 | Intermediate |
+| REST APIs             | Intermediate |
+| MongoDB               | Intermediate |
+| SQL                   | Intermediate |
 | Django REST Framework | Intermediate |
-| Pandas | Intermediate |
-| NumPy | Intermediate |
-| Scikit-learn | Intermediate |
-| OpenCV | Intermediate |
-| TensorFlow | Intermediate |
-| Git | Intermediate |
-| GitHub | Intermediate |
+| Pandas                | Intermediate |
+| NumPy                 | Intermediate |
+| Scikit-learn          | Intermediate |
+| OpenCV                | Intermediate |
+| TensorFlow            | Intermediate |
+| Git                   | Intermediate |
+| GitHub                | Intermediate |
 
 | Figma | Beginner |
-
 
 ## Previous Projects / Experience
 

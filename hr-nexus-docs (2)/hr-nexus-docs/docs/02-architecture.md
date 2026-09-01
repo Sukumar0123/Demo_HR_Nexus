@@ -12,7 +12,7 @@ A modular monolith gets us:
 - **One deployable unit** → simpler CI/CD, simpler local dev (`docker compose up`), fewer moving parts to secure and monitor.
 - **Clean app boundaries inside Django** → if a specific module (analytics, recruitment) later needs independent scaling, it can be extracted because the boundary already exists in code.
 
-## Request Flow
+## Request Flowweweweewewewewewew
 
 ```
 Browser (React SPA)
@@ -38,13 +38,13 @@ MySQL ──► Pandas extraction layer ──► Analytics endpoints ──► 
 
 ## Why this shape, explicitly
 
-| Decision | Reasoning |
-|---|---|
-| Modular monolith over microservices | Core HR data is highly relational and shared across every module; microservices would force distributed transactions for basic workflows like "create employee → create leave balance → create payroll profile." |
-| MySQL only | One relational engine, strong FK/constraint support, mature Django ORM support, avoids the operational cost of running two database technologies for the same domain. |
-| JWT in HttpOnly cookies (not localStorage) | Removes JWT from JS-accessible storage, closing the most common XSS-to-token-theft path, while still allowing stateless auth on the API. |
-| Redis + Celery | Anything slow, bulk, or schedulable (payslip PDF generation, scheduled reports, reminder emails) is offloaded so API requests stay fast and predictable. |
-| Separate analytics layer (Pandas, read-only queries) | Keeps CRUD write-paths simple and un-cluttered by aggregation logic; analytics failures/slowness can never block core HR operations. |
-| Nginx + Gunicorn, not `runserver` | Django's dev server is single-threaded and not hardened for production traffic or TLS. |
+| Decision                                             | Reasoning                                                                                                                                                                                                        |
+| ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Modular monolith over microservices                  | Core HR data is highly relational and shared across every module; microservices would force distributed transactions for basic workflows like "create employee → create leave balance → create payroll profile." |
+| MySQL only                                           | One relational engine, strong FK/constraint support, mature Django ORM support, avoids the operational cost of running two database technologies for the same domain.                                            |
+| JWT in HttpOnly cookies (not localStorage)           | Removes JWT from JS-accessible storage, closing the most common XSS-to-token-theft path, while still allowing stateless auth on the API.                                                                         |
+| Redis + Celery                                       | Anything slow, bulk, or schedulable (payslip PDF generation, scheduled reports, reminder emails) is offloaded so API requests stay fast and predictable.                                                         |
+| Separate analytics layer (Pandas, read-only queries) | Keeps CRUD write-paths simple and un-cluttered by aggregation logic; analytics failures/slowness can never block core HR operations.                                                                             |
+| Nginx + Gunicorn, not `runserver`                    | Django's dev server is single-threaded and not hardened for production traffic or TLS.                                                                                                                           |
 
 ⬅️ [Back to root README](../README.md)
