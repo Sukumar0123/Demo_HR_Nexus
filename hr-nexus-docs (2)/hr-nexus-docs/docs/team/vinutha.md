@@ -76,21 +76,12 @@
 - Configured secure access using IAM roles and security groups.
 - Implemented file transfer between EC2 and S3.
 
-### TalentNest — Full Stack Recruitment Platform
-
-- Developed a full-stack recruitment platform with Student and Recruiter modules.
-- Implemented authentication and role-based access control.
-- Designed REST APIs using Flask.
-- Integrated MySQL for users and job postings.
-- Built the frontend using React.
-
 ## Areas of Interest
 
 - Data Analytics
 - Machine Learning
 - Data Visualization
 - Business Intelligence
-- Web Development
 - Cloud Deployment
 
 ## What I Want to Learn
