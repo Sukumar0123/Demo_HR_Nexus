@@ -19,9 +19,6 @@
 | ---------------- | ------------ |
 | Python           | Intermediate |
 | SQL              | Intermediate |
-| HTML             | Intermediate |
-| CSS              | Intermediate |
-| JavaScript       | Intermediate |
 | Pandas           | Intermediate |
 | NumPy            | Intermediate |
 | Matplotlib       | Intermediate |
@@ -29,11 +26,7 @@
 | Scikit-learn     | Intermediate |
 | Machine Learning | Intermediate |
 | Power BI         | Intermediate |
-| Streamlit        | Intermediate |
 | Git & GitHub     | Beginner     |
-| Flask            | Intermediate |
-| React            | Beginner     |
-| MySQL            | Intermediate |
 | AWS              | Beginner     |
 
 ## Previous Projects & Experience
