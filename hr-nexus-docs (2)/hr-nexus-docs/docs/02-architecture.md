@@ -10,9 +10,11 @@ A modular monolith gets us:
 
 - **Single source of truth** in one MySQL instance → strong referential integrity via real foreign keys, not eventual consistency.
 - **One deployable unit** → simpler CI/CD, simpler local dev (`docker compose up`), fewer moving parts to secure and monitor.
-- **Clean app boundaries inside Django** → if a specific module (analytics, recruitment) later needs independent scaling, it can be extracted because the boundary already exists in code.
+- # **Clean app boundaries inside Django** → if a specific module (analytics, recruitment) later needs independent scaling, it can be extracted because the boundary already exists in code.
 
-## Request Flow
+## Request Flowweweweewewewewewewww
+
+> > > > > > > b4265d8 (change)
 
 ```
 Browser (React SPA)
