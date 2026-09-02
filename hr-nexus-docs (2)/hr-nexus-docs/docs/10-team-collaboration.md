@@ -2,7 +2,7 @@
 
 This doc covers how the team actually works together day to day — branching strategy, code review, communication, and the habits that keep a multi-module project like HR Nexus consistent as more people touch it.
 
-## Branching Strategyggggggyyyyyyyy
+## Branching Strategy
 
 HR Nexus uses a **trunk-based branching model with short-lived feature branches**:
 
