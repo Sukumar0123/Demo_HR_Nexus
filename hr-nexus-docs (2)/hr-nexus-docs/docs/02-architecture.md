@@ -1,52 +1,231 @@
-# 🏗️ System Architecture
+# Authentication & Authorization
 
-## Overview
+## Authentication Overview
 
-HR Nexus is built as a **modular monolith**: one Django backend composed of clearly bounded apps, one React SPA, one MySQL database.
+The application uses a JWT-based authentication system with secure cookie storage. Authentication is implemented using two token types:
 
-This is deliberate. An HR platform's modules (employees, attendance, leave, payroll, etc.) share the same core entities — `User`, `Employee`, `Department` — constantly. Splitting these into microservices early would mean either duplicating that core data across services or paying constant network-call/consistency overhead for what are fundamentally transactional, relational operations.
+| Token Type  | Purpose                                                            | Lifetime    |
+| ----------- | ------------------------------------------------------------------ | ----------- |
+| Access JWT  | Authorizes API requests                                            | Short-lived |
+| Refresh JWT | Obtains new Access JWTs without requiring the user to log in again | Long-lived  |
 
-A modular monolith gets us:
+### Token Storage
 
-- **Single source of truth** in one MySQL instance → strong referential integrity via real foreign keys, not eventual consistency.
-- **One deployable unit** → simpler CI/CD, simpler local dev (`docker compose up`), fewer moving parts to secure and monitor.
-- # **Clean app boundaries inside Django** → if a specific module (analytics, recruitment) later needs independent scaling, it can be extracted because the boundary already exists in code.
+JWT tokens are stored in secure cookies with the following configuration:
 
-## Request Flowweweweewewewewewewww
+* **HttpOnly**: Prevents JavaScript access to tokens.
+* **Secure**: Cookies are transmitted only over HTTPS.
+* **SameSite**: Protects against CSRF attacks.
+* **Frontend applications do not access, store, or manage raw JWT tokens directly.**
+* Authentication is handled automatically through browser-managed cookies.
 
-> > > > > > > b4265d8 (change)
+---
 
+## Authentication Flow
+
+### Login Flow
+
+1. User submits valid credentials.
+2. Backend validates credentials.
+3. Backend generates:
+
+   * Access JWT
+   * Refresh JWT
+4. Both tokens are stored in HttpOnly, Secure, SameSite cookies.
+5. User is considered authenticated.
+6. Frontend receives authentication status but does not receive raw JWT values.
+
+```text
+User Login
+    ↓
+Credential Validation
+    ↓
+Generate Access JWT + Refresh JWT
+    ↓
+Set Secure HttpOnly Cookies
+    ↓
+Authenticated Session Created
 ```
-Browser (React SPA)
-   │  HTTPS
-   ▼
-Nginx (reverse proxy, TLS termination, static files, gzip)
-   │
-   ▼
-Gunicorn (WSGI workers)
-   │
-   ▼
-Django REST Framework
-   ├── Auth middleware (JWT from HttpOnly cookie)
-   ├── Permission classes (role + object-level)
-   ├── App: employees / attendance / leave / recruitment / payroll / ...
-   ▼
-MySQL (primary datastore)
 
-Django ──► Redis ──► Celery workers ──► background jobs (email, payslip gen, scheduled reports)
+### Accessing Protected APIs
 
-MySQL ──► Pandas extraction layer ──► Analytics endpoints ──► React charts (Recharts)
+1. Browser automatically includes authentication cookies with requests.
+2. Backend validates the Access JWT.
+3. If valid:
+
+   * Request proceeds.
+4. If expired:
+
+   * Refresh flow is triggered.
+
+```text
+Client Request
+    ↓
+Access JWT Validation
+    ↓
+Valid → Process Request
+Expired → Refresh Flow
 ```
 
-## Why this shape, explicitly
+### Refresh Token Flow
 
-| Decision                                             | Reasoning                                                                                                                                                                                                        |
-| ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Modular monolith over microservices                  | Core HR data is highly relational and shared across every module; microservices would force distributed transactions for basic workflows like "create employee → create leave balance → create payroll profile." |
-| MySQL only                                           | One relational engine, strong FK/constraint support, mature Django ORM support, avoids the operational cost of running two database technologies for the same domain.                                            |
-| JWT in HttpOnly cookies (not localStorage)           | Removes JWT from JS-accessible storage, closing the most common XSS-to-token-theft path, while still allowing stateless auth on the API.                                                                         |
-| Redis + Celery                                       | Anything slow, bulk, or schedulable (payslip PDF generation, scheduled reports, reminder emails) is offloaded so API requests stay fast and predictable.                                                         |
-| Separate analytics layer (Pandas, read-only queries) | Keeps CRUD write-paths simple and un-cluttered by aggregation logic; analytics failures/slowness can never block core HR operations.                                                                             |
-| Nginx + Gunicorn, not `runserver`                    | Django's dev server is single-threaded and not hardened for production traffic or TLS.                                                                                                                           |
+When the Access JWT expires:
 
-⬅️ [Back to root README](../README.md)
+1. Client sends a refresh request.
+2. Refresh JWT is validated.
+3. If valid:
+
+   * New Access JWT is generated.
+   * Refresh JWT may be rotated according to security policy.
+4. Updated cookies are sent back to the browser.
+5. User session continues without requiring re-authentication.
+
+```text
+Expired Access JWT
+        ↓
+Refresh Endpoint
+        ↓
+Validate Refresh JWT
+        ↓
+Generate New Tokens
+        ↓
+Update Secure Cookies
+        ↓
+Continue Session
+```
+
+### Logout Flow
+
+1. User initiates logout.
+2. Backend invalidates the refresh session/token.
+3. Authentication cookies are cleared.
+4. Any future protected requests require authentication again.
+
+```text
+Logout Request
+      ↓
+Invalidate Refresh Session
+      ↓
+Clear Authentication Cookies
+      ↓
+Session Terminated
+```
+
+---
+
+# Authorization Model
+
+## Role-Based Access Control (RBAC)
+
+Authorization is implemented using role-based access control.
+
+### Authentication vs Authorization
+
+* Authentication determines who the user is.
+* Authorization determines what the user is allowed to do.
+
+### Role Validation
+
+For protected endpoints:
+
+1. User must have a valid authenticated session.
+2. Access JWT is validated.
+3. User roles and permissions are extracted from trusted server-side authentication context.
+4. Endpoint authorization rules are evaluated.
+5. Access is granted or denied.
+
+### Example Roles
+
+| Role    | Description                   |
+| ------- | ----------------------------- |
+| Admin   | Full system access            |
+| Manager | Access to management features |
+| User    | Standard application access   |
+
+> Actual role definitions should match the application's current role configuration.
+
+### Protected Endpoints
+
+Protected APIs require:
+
+* Valid authenticated session.
+* Valid Access JWT.
+* Required role or permission.
+
+Requests failing authentication return:
+
+```http
+401 Unauthorized
+```
+
+Requests failing authorization return:
+
+```http
+403 Forbidden
+```
+
+---
+
+# Security Considerations
+
+## JWT Security
+
+* Access JWTs are short-lived.
+* Refresh JWTs are used only for session renewal.
+* Refresh tokens should be rotated when applicable.
+* JWT signing keys must be securely managed.
+* Expired or invalid tokens are rejected.
+
+## Cookie Security
+
+Authentication cookies must use:
+
+* HttpOnly
+* Secure
+* SameSite
+
+This prevents:
+
+* Token theft through JavaScript
+* Accidental token exposure
+* Many CSRF attack scenarios
+
+## Frontend Security
+
+The frontend:
+
+* Does not store JWTs in localStorage.
+* Does not store JWTs in sessionStorage.
+* Does not read JWT cookie values.
+* Relies on browser-managed authentication cookies.
+* Uses authenticated API requests without direct token handling.
+
+## API Security Checklist
+
+* [x] HTTPS enforced in all environments.
+* [x] Access JWT validation on protected endpoints.
+* [x] Refresh JWT validation before token renewal.
+* [x] Secure HttpOnly cookie storage.
+* [x] SameSite cookie protection enabled.
+* [x] Frontend does not access raw JWT tokens.
+* [x] Role-based authorization enforced.
+* [x] Invalid and expired tokens rejected.
+* [x] Logout clears authentication cookies.
+* [x] Authentication failures return 401.
+* [x] Authorization failures return 403.
+* [x] Sensitive authentication events are logged.
+* [x] Refresh token misuse detection implemented where applicable.
+
+---
+
+# Session Lifecycle Summary
+
+1. User logs in.
+2. Access JWT and Refresh JWT are issued.
+3. Tokens are stored in Secure HttpOnly cookies.
+4. Browser automatically sends cookies with requests.
+5. Access JWT authorizes protected API access.
+6. Refresh JWT renews expired access tokens.
+7. Logout clears authentication cookies and terminates the session.
+
+This implementation ensures secure authentication, minimizes token exposure, and supports role-based authorization across protected REST API endpoints.

@@ -18,5 +18,5 @@
 - Features: Registration, Team Management, Scheduling, Project Submission, and Evaluation
 
 ## Connect With Me
-- 📧 Email: balajiputluri09@gmail.com
+- 📧 Email: balajireddy612@gmail.com
 - 📍 Nellore, Andhra Pradesh
