@@ -5,7 +5,6 @@
 HR Nexus is built as a **modular monolith**: one Django backend composed of clearly bounded apps, one React SPA, one MySQL database.
 
 This is deliberate. An HR platform's modules (employees, attendance, leave, payroll, etc.) share the same core entities — `User`, `Employee`, `Department` — constantly. Splitting these into microservices early would mean either duplicating that core data across services or paying constant network-call/consistency overhead for what are fundamentally transactional, relational operations.
-
 A modular monolith gets us:
 
 - **Single source of truth** in one MySQL instance → strong referential integrity via real foreign keys, not eventual consistency.
