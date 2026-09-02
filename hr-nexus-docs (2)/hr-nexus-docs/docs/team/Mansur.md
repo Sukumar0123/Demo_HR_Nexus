@@ -14,7 +14,7 @@
 
 - **Master of Computer Applications (MCA)**
 - Vikrama Simhapuri University
-- 2024 – 2049
+- 2024 – 2026
 - Ongoing
 
 - **Bachelor of Science – Mathematics, Statistics, Computer Science**
