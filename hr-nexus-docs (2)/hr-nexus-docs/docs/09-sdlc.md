@@ -8,16 +8,16 @@ An HR platform touches sensitive personal and financial data (salaries, personal
 
 ## The Phases
 
-| Phase | Name | Deliverable | Gate to pass before moving on |
-|---|---|---|---|
-| 1 | **Requirements & Product Definition** | Roles, permissions, workflows, business rules | Stakeholder agreement on scope and roles |
-| 2 | **Architecture (this Phase 1 blueprint)** | System architecture, DB schema, ER diagram, sitemap, tech stack | Blueprint reviewed and approved — see [Roadmap](08-roadmap.md) |
-| 3 | **UX/UI Design** | Wireframes, design system, responsive layouts, dashboard designs | Design review |
-| 4 | **Foundation** | Django + React scaffolds, MySQL, Docker Compose, JWT auth, roles/permissions | Working auth + role routing |
-| 5 | **Core Feature Development** | Module-by-module: Employees → Attendance/Leave → Recruitment/Payroll → Performance/Training | Each module's own pre-implementation note approved first |
-| 6 | **Testing & Security Hardening** | Unit tests, API tests, frontend tests, security testing, UAT | All tests passing, no known critical vulnerabilities |
-| 7 | **Deployment** | Docker prod config, Nginx, CI/CD, monitoring, backups | Successful staging deployment |
-| 8 | **Maintenance & Iteration** | Bug fixes, incremental features, future AI/ML modules | Ongoing |
+| Phase | Name                                      | Deliverable                                                                                 | Gate to pass before moving on                                  |
+| ----- | ----------------------------------------- | ------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| 1     | **Requirements & Product Definition**     | Roles, permissions, workflows, business rules                                               | Stakeholder agreement on scope and roles                       |
+| 2     | **Architecture (this Phase 1 blueprint)** | System architecture, DB schema, ER diagram, sitemap, tech stack                             | Blueprint reviewed and approved — see [Roadmap](08-roadmap.md) |
+| 3     | **UX/UI Design**                          | Wireframes, design system, responsive layouts, dashboard designs                            | Design review                                                  |
+| 4     | **Foundation**                            | Django + React scaffolds, MySQL, Docker Compose, JWT auth, roles/permissions                | Working auth + role routing                                    |
+| 5     | **Core Feature Development**              | Module-by-module: Employees → Attendance/Leave → Recruitment/Payroll → Performance/Training | Each module's own pre-implementation note approved first       |
+| 6     | **Testing & Security Hardening**          | Unit tests, API tests, frontend tests, security testing, UAT                                | All tests passing, no known critical vulnerabilities           |
+| 7     | **Deployment**                            | Docker prod config, Nginx, CI/CD, monitoring, backups                                       | Successful staging deployment                                  |
+| 8     | **Maintenance & Iteration**               | Bug fixes, incremental features, future AI/ML modules                                       | Ongoing                                                        |
 
 ## Per-module process (repeats for every feature module)
 
@@ -40,7 +40,7 @@ This keeps every module consistent with the rest of the system instead of each o
 - **Never invent data.** Every number shown in analytics traces back to a real, testable query — nothing is hardcoded or estimated to look good in a demo.
 - **Fail loudly in CI, not silently in production.** The CI/CD pipeline fails the build on any lint/test failure — there are no silent-pass placeholder steps.
 
-## How this maps to common SDLC models
+## How this maps to common SDLC modelsadasdsdfdsfda
 
 HR Nexus's process is closest to a **Waterfall-with-gates model at the macro level** (Phase 1 → 2 → 3 ... each fully gated) combined with an **iterative/Agile approach inside each feature phase** (each module gets its own short design-review-build-test cycle rather than one big-bang release). This hybrid is deliberate: the macro architecture (roles, DB schema, auth model) is expensive to change late, so it's locked down early — but individual feature modules (Recruitment, Payroll, Training, etc.) are built and reviewed incrementally so problems surface early and often, module by module.
 
