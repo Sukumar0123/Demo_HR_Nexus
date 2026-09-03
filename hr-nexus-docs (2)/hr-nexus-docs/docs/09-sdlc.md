@@ -3,7 +3,6 @@
 HR Nexus follows a **specification-first, phase-gated SDLC** — each phase produces a concrete deliverable that must be reviewed and approved before the next phase starts. No implementation code is written until its phase's design has been signed off.
 
 ## Why this SDLC model
-
 An HR platform touches sensitive personal and financial data (salaries, personal documents, performance reviews) across many interdependent modules. Building fast and fixing architecture later is expensive here — a wrong decision on roles/permissions or database structure ripples through every module built on top of it. So the process favors **getting the design right before writing code**, rather than an ad-hoc "build first, structure later" approach.
 
 ## The Phases
@@ -40,7 +39,8 @@ This keeps every module consistent with the rest of the system instead of each o
 - **Never invent data.** Every number shown in analytics traces back to a real, testable query — nothing is hardcoded or estimated to look good in a demo.
 - **Fail loudly in CI, not silently in production.** The CI/CD pipeline fails the build on any lint/test failure — there are no silent-pass placeholder steps.
 
-## How this maps to common SDLC modelsadasdsdfdsfda
+## How this maps to common SDLC models
+
 
 HR Nexus's process is closest to a **Waterfall-with-gates model at the macro level** (Phase 1 → 2 → 3 ... each fully gated) combined with an **iterative/Agile approach inside each feature phase** (each module gets its own short design-review-build-test cycle rather than one big-bang release). This hybrid is deliberate: the macro architecture (roles, DB schema, auth model) is expensive to change late, so it's locked down early — but individual feature modules (Recruitment, Payroll, Training, etc.) are built and reviewed incrementally so problems surface early and often, module by module.
 
